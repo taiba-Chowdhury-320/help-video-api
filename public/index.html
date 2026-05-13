@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🌸 Sakura Video Vault</title>
+<title>🔥 Rocky Video Vault</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -585,8 +585,8 @@
 <!-- Main -->
 <div class="wrapper">
   <header>
-    <div class="header-badge">🌸 SAKURA VIDEO VAULT</div>
-    <h1 class="logo">Video Server</h1>
+    <div class="header-badge">🔥 ROCKY VIDEO VAULT</div>
+    <h1 class="logo">Rocky Server</h1>
     <p class="tagline">◈ STREAM · SHARE · EXPERIENCE ◈</p>
     <div class="header-line"></div>
   </header>
@@ -632,7 +632,7 @@
 </div>
 
 <footer>
-  <div class="footer-logo">Sakura Vault</div>
+  <div class="footer-logo">Rocky Vault</div>
   <div class="footer-text">POWERED BY ROCKY BOT · 2025</div>
 </footer>
 
@@ -650,34 +650,150 @@
 //    isPopular: false
 //  }
 // ════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+//  ★ ROCKY'S VIDEO LIST ★
+//
+//  নতুন video যোগ করতে নিচের format copy করো:
+//  {
+//    title: "Video এর নাম",
+//    link: "https://drive.google.com/file/d/তোমার_FILE_ID/preview",
+//    desc: "Video এর বিবরণ",
+//    tag: "Category নাম",
+//    badge: "NEW",      ← NEW / HOT / VIRAL / TOP বা খালি "" রাখো
+//    isNew: true,       ← নতুন হলে true
+//    isPopular: false   ← popular হলে true
+//  },
+//
+//  Google Drive link বানানোর নিয়ম:
+//  ১. Drive এ video upload করো
+//  ২. Right click → Share → Anyone with the link
+//  ③. Link থেকে ID copy করো (drive.google.com/file/d/ এর পরের অংশ)
+//  ④. এভাবে বসাও: https://drive.google.com/file/d/ID_EKHANE/preview
+// ═══════════════════════════════════════════════════════════
+
 const VIDEO_DATA = [
+
+  // ── Video 1 ──
   {
-    title: "Intro Video",
-    link: "https://www.w3schools.com/html/mov_bbb.mp4", // ← Replace with your link
-    desc: "This is a sample video. Replace with your own Google Drive link.",
-    tag: "Sample",
-    badge: "DEMO",
-    isNew: true,
-    isPopular: true
-  },
-  {
-    title: "Tutorial #1",
-    link: "https://www.w3schools.com/html/mov_bbb.mp4", // ← Replace
-    desc: "Replace this with your video description.",
-    tag: "Tutorial",
+    title: "Video 1 Name",
+    link: "https://drive.google.com/file/d/VIDEO_1_ID/preview",
+    desc: "Video 1 description likhbe ekhane",
+    tag: "Category1",
     badge: "NEW",
     isNew: true,
     isPopular: false
   },
+
+  // ── Video 2 ──
   {
-    title: "Special Video",
-    link: "https://www.w3schools.com/html/mov_bbb.mp4", // ← Replace
-    desc: "Another placeholder. Add your Google Drive direct link here.",
-    tag: "Special",
+    title: "Video 2 Name",
+    link: "https://drive.google.com/file/d/VIDEO_2_ID/preview",
+    desc: "Video 2 description likhbe ekhane",
+    tag: "Category1",
+    badge: "HOT",
+    isNew: true,
+    isPopular: true
+  },
+
+  // ── Video 3 ──
+  {
+    title: "Video 3 Name",
+    link: "https://drive.google.com/file/d/VIDEO_3_ID/preview",
+    desc: "Video 3 description likhbe ekhane",
+    tag: "Category2",
+    badge: "VIRAL",
+    isNew: false,
+    isPopular: true
+  },
+
+  // ── Video 4 ──
+  {
+    title: "Video 4 Name",
+    link: "https://drive.google.com/file/d/VIDEO_4_ID/preview",
+    desc: "Video 4 description likhbe ekhane",
+    tag: "Category2",
+    badge: "",
+    isNew: false,
+    isPopular: false
+  },
+
+  // ── Video 5 ──
+  {
+    title: "Video 5 Name",
+    link: "https://drive.google.com/file/d/VIDEO_5_ID/preview",
+    desc: "Video 5 description likhbe ekhane",
+    tag: "Category3",
+    badge: "TOP",
+    isNew: false,
+    isPopular: true
+  },
+
+  // ── Video 6 ──
+  {
+    title: "Video 6 Name",
+    link: "https://drive.google.com/file/d/VIDEO_6_ID/preview",
+    desc: "Video 6 description likhbe ekhane",
+    tag: "Category3",
+    badge: "NEW",
+    isNew: true,
+    isPopular: false
+  },
+
+  // ── Video 7 ──
+  {
+    title: "Video 7 Name",
+    link: "https://drive.google.com/file/d/VIDEO_7_ID/preview",
+    desc: "Video 7 description likhbe ekhane",
+    tag: "Category4",
+    badge: "",
+    isNew: false,
+    isPopular: false
+  },
+
+  // ── Video 8 ──
+  {
+    title: "Video 8 Name",
+    link: "https://drive.google.com/file/d/VIDEO_8_ID/preview",
+    desc: "Video 8 description likhbe ekhane",
+    tag: "Category4",
     badge: "HOT",
     isNew: false,
     isPopular: true
-  }
+  },
+
+  // ── Video 9 ──
+  {
+    title: "Video 9 Name",
+    link: "https://drive.google.com/file/d/VIDEO_9_ID/preview",
+    desc: "Video 9 description likhbe ekhane",
+    tag: "Category5",
+    badge: "VIRAL",
+    isNew: true,
+    isPopular: true
+  },
+
+  // ── Video 10 ──
+  {
+    title: "Video 10 Name",
+    link: "https://drive.google.com/file/d/VIDEO_10_ID/preview",
+    desc: "Video 10 description likhbe ekhane",
+    tag: "Category5",
+    badge: "NEW",
+    isNew: true,
+    isPopular: false
+  },
+
+  // ══ আরো video add korte ekhane copy-paste koro ══
+  // {
+  //   title: "New Video",
+  //   link: "https://drive.google.com/file/d/তোমার_ID/preview",
+  //   desc: "Description",
+  //   tag: "Category",
+  //   badge: "NEW",
+  //   isNew: true,
+  //   isPopular: false
+  // },
+
 ];
 
 // ════════ App Logic ════════
