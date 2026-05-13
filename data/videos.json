@@ -1,14 +1,121 @@
 {
+  "site": {
+    "name": "Rocky Video Vault",
+    "owner": "ROCKY",
+    "version": "1.0"
+  },
+
   "videos": [
+
     {
-      "title": "Video 1",
-      "link": "তোমার_drive_link_1",
-      "thumbnail": ""
+      "id": 1,
+      "title": "Video 1 Name",
+      "link": "https://drive.google.com/file/d/VIDEO_1_ID/preview",
+      "desc": "Video 1 er description ekhane likho",
+      "tag": "Category1",
+      "badge": "NEW",
+      "isNew": true,
+      "isPopular": false
     },
+
     {
-      "title": "Video 2", 
-      "link": "তোমার_drive_link_2",
-      "thumbnail": ""
+      "id": 2,
+      "title": "Video 2 Name",
+      "link": "https://drive.google.com/file/d/VIDEO_2_ID/preview",
+      "desc": "Video 2 er description ekhane likho",
+      "tag": "Category1",
+      "badge": "HOT",
+      "isNew": true,
+      "isPopular": true
+    },
+
+    {
+      "id": 3,
+      "title": "Video 3 Name",
+      "link": "https://drive.google.com/file/d/VIDEO_3_ID/preview",
+      "desc": "Video 3 er description ekhane likho",
+      "tag": "Category2",
+      "badge": "VIRAL",
+      "isNew": false,
+      "isPopular": true
+    },
+
+    {
+      "id": 4,
+      "title": "Video 4 Name",
+      "link": "https://drive.google.com/file/d/VIDEO_4_ID/preview",
+      "desc": "Video 4 er description ekhane likho",
+      "tag": "Category2",
+      "badge": "",
+      "isNew": false,
+      "isPopular": false
+    },
+
+    {
+      "id": 5,
+      "title": "Video 5 Name",
+      "link": "https://drive.google.com/file/d/VIDEO_5_ID/preview",
+      "desc": "Video 5 er description ekhane likho",
+      "tag": "Category3",
+      "badge": "TOP",
+      "isNew": false,
+      "isPopular": true
+    },
+
+    {
+      "id": 6,
+      "title": "Video 6 Name",
+      "link": "https://drive.google.com/file/d/VIDEO_6_ID/preview",
+      "desc": "Video 6 er description ekhane likho",
+      "tag": "Category3",
+      "badge": "NEW",
+      "isNew": true,
+      "isPopular": false
+    },
+
+    {
+      "id": 7,
+      "title": "Video 7 Name",
+      "link": "https://drive.google.com/file/d/VIDEO_7_ID/preview",
+      "desc": "Video 7 er description ekhane likho",
+      "tag": "Category4",
+      "badge": "",
+      "isNew": false,
+      "isPopular": false
+    },
+
+    {
+      "id": 8,
+      "title": "Video 8 Name",
+      "link": "https://drive.google.com/file/d/VIDEO_8_ID/preview",
+      "desc": "Video 8 er description ekhane likho",
+      "tag": "Category4",
+      "badge": "HOT",
+      "isNew": false,
+      "isPopular": true
+    },
+
+    {
+      "id": 9,
+      "title": "Video 9 Name",
+      "link": "https://drive.google.com/file/d/VIDEO_9_ID/preview",
+      "desc": "Video 9 er description ekhane likho",
+      "tag": "Category5",
+      "badge": "VIRAL",
+      "isNew": true,
+      "isPopular": true
+    },
+
+    {
+      "id": 10,
+      "title": "Video 10 Name",
+      "link": "https://drive.google.com/file/d/VIDEO_10_ID/preview",
+      "desc": "Video 10 er description ekhane likho",
+      "tag": "Category5",
+      "badge": "NEW",
+      "isNew": true,
+      "isPopular": false
     }
+
   ]
 }
