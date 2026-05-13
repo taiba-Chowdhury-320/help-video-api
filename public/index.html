@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸 Sakura Video Vault</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #ff6eb4;
+    --deep-pink: #e91e8c;
+    --cyan: #00f5ff;
+    --purple: #b44fff;
+    --dark: #050510;
+    --darker: #020208;
+    --card-bg: rgba(255,110,180,0.04);
+    --border: rgba(255,110,180,0.18);
+    --glow-pink: 0 0 20px rgba(255,110,180,0.5);
+    --glow-cyan: 0 0 20px rgba(0,245,255,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--darker);
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── Custom Cursor ── */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--pink);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s, background 0.2s;
+    box-shadow: var(--glow-pink);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(255,110,180,0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%,-50%);
+    transition: all 0.15s ease;
+  }
+
+  /* ── Animated BG ── */
+  .bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .bg-canvas::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(180,79,255,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 90%, rgba(255,110,180,0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,245,255,0.04) 0%, transparent 70%);
+  }
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,110,180,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,110,180,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(60px); }
+  }
+
+  /* ── Sakura Petals ── */
+  .petal {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: radial-gradient(circle, #ffb3d9, #ff6eb4);
+    border-radius: 0 50% 0 50%;
+    pointer-events: none;
+    z-index: 1;
+    animation: fall linear infinite;
+    opacity: 0;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 0.8; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ── Layout ── */
+  .wrapper {
+    position: relative;
+    z-index: 2;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ── Header ── */
+  header {
+    text-align: center;
+    padding: 70px 0 50px;
+    position: relative;
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(255,110,180,0.1);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 6px 20px;
+    font-size: 12px;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 3px;
+    color: var(--pink);
+    margin-bottom: 22px;
+    animation: fadeDown 0.8s ease both;
+  }
+  .logo {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(32px, 7vw, 64px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff 0%, var(--pink) 40%, var(--cyan) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+    animation: fadeDown 0.8s 0.1s ease both;
+    text-shadow: none;
+    filter: drop-shadow(0 0 30px rgba(255,110,180,0.3));
+  }
+  .tagline {
+    margin-top: 14px;
+    font-size: 14px;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.4);
+    animation: fadeDown 0.8s 0.2s ease both;
+  }
+  .header-line {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--pink), transparent);
+    margin: 30px auto 0;
+    animation: fadeDown 0.8s 0.3s ease both;
+  }
+
+  /* ── Stats Bar ── */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--pink);
+    text-shadow: var(--glow-pink);
+  }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .stat-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+    align-self: center;
+  }
+
+  /* ── Search & Filter ── */
+  .controls {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+  .search-wrap {
+    flex: 1;
+    min-width: 240px;
+    position: relative;
+  }
+  .search-wrap input {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px 14px 48px;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .search-wrap input:focus {
+    border-color: var(--pink);
+    box-shadow: var(--glow-pink);
+  }
+  .search-wrap input::placeholder { color: rgba(255,255,255,0.3); }
+  .search-icon {
+    position: absolute;
+    left: 16px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--pink);
+    font-size: 18px;
+  }
+  .filter-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 22px;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: none;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--pink);
+    color: var(--pink);
+    box-shadow: var(--glow-pink);
+    background: rgba(255,110,180,0.08);
+  }
+
+  /* ── Video Grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  /* ── Video Card ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(.23,1,.32,1), box-shadow 0.4s, border-color 0.3s;
+    animation: cardIn 0.6s ease both;
+    cursor: none;
+  }
+  .card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(255,110,180,0.5);
+    box-shadow: 0 20px 60px rgba(255,110,180,0.15), 0 0 0 1px rgba(255,110,180,0.1);
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, rgba(180,79,255,0.15), rgba(255,110,180,0.1));
+    overflow: hidden;
+  }
+  .card-thumb video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.85;
+    transition: opacity 0.3s;
+  }
+  .card:hover .card-thumb video { opacity: 1; }
+
+  .thumb-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(5,5,16,0.4);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover .thumb-overlay { opacity: 1; }
+
+  .play-btn {
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, var(--pink), var(--deep-pink));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 0 30px rgba(255,110,180,0.6);
+    transform: scale(0.8);
+    transition: transform 0.3s;
+  }
+  .card:hover .play-btn { transform: scale(1); }
+
+  .thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .thumb-placeholder .icon {
+    font-size: 42px;
+    filter: drop-shadow(0 0 12px rgba(255,110,180,0.6));
+  }
+  .thumb-placeholder span {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  .card-badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: rgba(5,5,16,0.8);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
+    color: var(--cyan);
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+  .card-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.5px;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.5;
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-tag {
+    font-size: 11px;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1.5px;
+    color: var(--pink);
+    background: rgba(255,110,180,0.08);
+    border: 1px solid rgba(255,110,180,0.2);
+    border-radius: 6px;
+    padding: 3px 10px;
+  }
+  .watch-btn {
+    background: linear-gradient(135deg, var(--pink), var(--deep-pink));
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: none;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .watch-btn:hover {
+    box-shadow: var(--glow-pink);
+    transform: scale(1.05);
+  }
+
+  /* ── Modal ── */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(2,2,8,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-backdrop.open { display: flex; }
+
+  .modal {
+    background: #080818;
+    border: 1px solid rgba(255,110,180,0.25);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 800px;
+    overflow: hidden;
+    box-shadow: 0 40px 120px rgba(255,110,180,0.15);
+    animation: modalIn 0.4s cubic-bezier(.23,1,.32,1);
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .modal-close {
+    width: 36px; height: 36px;
+    background: rgba(255,110,180,0.1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--pink);
+    font-size: 18px;
+    cursor: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+  .modal-close:hover { background: rgba(255,110,180,0.2); box-shadow: var(--glow-pink); }
+  .modal-video {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+  }
+  .modal-video video { width: 100%; height: 100%; }
+
+  /* ── Empty State ── */
+  .empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: rgba(255,255,255,0.25);
+    grid-column: 1/-1;
+  }
+  .empty .e-icon { font-size: 60px; margin-bottom: 16px; }
+  .empty p { font-size: 15px; letter-spacing: 1px; }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    padding: 40px 0 20px;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+    position: relative;
+    z-index: 2;
+  }
+  .footer-logo {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 18px;
+    background: linear-gradient(135deg, var(--pink), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .footer-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+    margin-top: 8px;
+    letter-spacing: 2px;
+    font-family: 'Orbitron', sans-serif;
+  }
+
+  /* ── Loading ── */
+  .loading {
+    text-align: center;
+    padding: 100px 20px;
+    grid-column: 1/-1;
+  }
+  .spinner {
+    width: 50px; height: 50px;
+    border: 2px solid rgba(255,110,180,0.15);
+    border-top-color: var(--pink);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading p {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* ── Keyframes ── */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--darker); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,110,180,0.3); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--pink); }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .stats { gap: 20px; }
+    .stat-divider { display: none; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Background -->
+<div class="bg-canvas">
+  <div class="grid-overlay"></div>
+</div>
+
+<!-- Petals container -->
+<div id="petals"></div>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Video Player</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-video">
+      <video id="modalVideo" controls autoplay></video>
+    </div>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="wrapper">
+  <header>
+    <div class="header-badge">🌸 SAKURA VIDEO VAULT</div>
+    <h1 class="logo">Video Server</h1>
+    <p class="tagline">◈ STREAM · SHARE · EXPERIENCE ◈</p>
+    <div class="header-line"></div>
+  </header>
+
+  <div class="stats" id="statsBar">
+    <div class="stat-item">
+      <div class="stat-num" id="totalVideos">0</div>
+      <div class="stat-label">Total Videos</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num" id="totalCats">0</div>
+      <div class="stat-label">Categories</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num">HD</div>
+      <div class="stat-label">Quality</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Free Access</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="Search videos..." oninput="filterVideos()">
+    </div>
+    <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-btn" onclick="setFilter('new', this)">🆕 New</button>
+    <button class="filter-btn" onclick="setFilter('popular', this)">🔥 Popular</button>
+  </div>
+
+  <div class="grid" id="videoGrid">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>LOADING VIDEOS...</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Sakura Vault</div>
+  <div class="footer-text">POWERED BY ROCKY BOT · 2025</div>
+</footer>
+
+<script>
+// ════════════════════════════════
+//  ★ ADD YOUR VIDEOS HERE ★
+//  Copy this format for each video:
+//  {
+//    title: "Video ka naam",
+//    link: "https://drive.google.com/file/d/YOUR_ID/preview",  ← Google Drive preview link
+//    desc: "Short description",
+//    tag: "Category",
+//    badge: "NEW",
+//    isNew: true,
+//    isPopular: false
+//  }
+// ════════════════════════════════
+const VIDEO_DATA = [
+  {
+    title: "Intro Video",
+    link: "https://www.w3schools.com/html/mov_bbb.mp4", // ← Replace with your link
+    desc: "This is a sample video. Replace with your own Google Drive link.",
+    tag: "Sample",
+    badge: "DEMO",
+    isNew: true,
+    isPopular: true
+  },
+  {
+    title: "Tutorial #1",
+    link: "https://www.w3schools.com/html/mov_bbb.mp4", // ← Replace
+    desc: "Replace this with your video description.",
+    tag: "Tutorial",
+    badge: "NEW",
+    isNew: true,
+    isPopular: false
+  },
+  {
+    title: "Special Video",
+    link: "https://www.w3schools.com/html/mov_bbb.mp4", // ← Replace
+    desc: "Another placeholder. Add your Google Drive direct link here.",
+    tag: "Special",
+    badge: "HOT",
+    isNew: false,
+    isPopular: true
+  }
+];
+
+// ════════ App Logic ════════
+let currentFilter = 'all';
+
+function getVideos() {
+  if (currentFilter === 'new') return VIDEO_DATA.filter(v => v.isNew);
+  if (currentFilter === 'popular') return VIDEO_DATA.filter(v => v.isPopular);
+  return VIDEO_DATA;
+}
+
+function renderVideos(list) {
+  const grid = document.getElementById('videoGrid');
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty"><div class="e-icon">🌸</div><p>No videos found</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map((v, i) => `
+    <div class="card" style="animation-delay:${i * 0.08}s" onclick="openModal('${v.link}','${escHtml(v.title)}')">
+      <div class="card-thumb">
+        <div class="thumb-placeholder">
+          <div class="icon">🎬</div>
+          <span>Click to Play</span>
+        </div>
+        <div class="thumb-overlay">
+          <div class="play-btn">▶</div>
+        </div>
+        ${v.badge ? `<div class="card-badge">${v.badge}</div>` : ''}
+      </div>
+      <div class="card-body">
+        <div class="card-title">${escHtml(v.title)}</div>
+        <div class="card-desc">${escHtml(v.desc || '')}</div>
+        <div class="card-footer">
+          <span class="card-tag">${escHtml(v.tag || 'VIDEO')}</span>
+          <span class="watch-btn">▶ Watch</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function filterVideos() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const base = getVideos();
+  const filtered = q ? base.filter(v => v.title.toLowerCase().includes(q) || (v.desc||'').toLowerCase().includes(q)) : base;
+  renderVideos(filtered);
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterVideos();
+}
+
+function updateStats() {
+  document.getElementById('totalVideos').textContent = VIDEO_DATA.length;
+  const cats = [...new Set(VIDEO_DATA.map(v => v.tag))].length;
+  document.getElementById('totalCats').textContent = cats;
+}
+
+// ════════ Modal ════════
+function openModal(link, title) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalVideo').src = link;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modalVideo').src = '';
+}
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ════════ Cursor ════════
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animCursor() {
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+// ════════ Petals ════════
+function spawnPetal() {
+  const el = document.createElement('div');
+  el.className = 'petal';
+  const size = 6 + Math.random() * 8;
+  el.style.cssText = `
+    width:${size}px;height:${size}px;
+    left:${Math.random() * 100}vw;
+    animation-duration:${5 + Math.random() * 8}s;
+    animation-delay:${Math.random() * 3}s;
+    opacity:0;
+  `;
+  document.getElementById('petals').appendChild(el);
+  setTimeout(() => el.remove(), 14000);
+}
+setInterval(spawnPetal, 600);
+for (let i = 0; i < 8; i++) setTimeout(spawnPetal, i * 200);
+
+// ════════ Init ════════
+updateStats();
+setTimeout(() => renderVideos(VIDEO_DATA), 800);
+</script>
+</body>
+</html>
